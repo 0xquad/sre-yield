@@ -43,7 +43,7 @@ CHARSET = [chr(c) for c in range(256)]
 
 WORD = string.ascii_letters + string.digits + "_"
 
-DEFAULT_RE_FLAGS = re.ASCII
+DEFAULT_RE_FLAGS = 0 # re.ASCII; doesn't exist in python2
 
 STATE_START, STATE_MIDDLE, STATE_END = list(range(3))
 
@@ -110,7 +110,7 @@ def _adjust_index(n, size):
     return n
 
 
-class WrappedSequence:
+class WrappedSequence(object):
     """This wraps a sequence, purely as a base clase for the other uses."""
 
     def __init__(self, raw):
@@ -328,10 +328,10 @@ class RepetitiveSequence(WrappedSequence):
 class SaveCaptureGroup(WrappedSequence):
     def __init__(self, parsed, key):
         self.key = key
-        super().__init__(parsed)
+        super(self.__class__, self).__init__(parsed)
 
     def get_item(self, n, d=None):
-        rv = super().get_item(n, d)
+        rv = super(self.__class__, self).get_item(n, d)
         if d is not None:
             d[self.key] = rv
         return rv
@@ -400,9 +400,9 @@ class RegexMembershipSequence(WrappedSequence):
         if self.has_groupref or d is not None:
             if d is None:
                 d = {}
-            return super().get_item(i, d)
+            return super(self.__class__, self).get_item(i, d)
         else:
-            return super().get_item(i)
+            return super(self.__class__, self).get_item(i)
 
     def sub_values(self, parsed):
         """This knows how to convert one piece of parsed pattern."""
@@ -569,7 +569,7 @@ class RegexMembershipSequenceMatches(RegexMembershipSequence):
             return result
 
         d = {}
-        s = super().get_item(i, d)
+        s = super(self.__class__, self).get_item(i, d)
         return Match(s, d, self.named_group_lookup)
 
 

@@ -237,3 +237,17 @@ other exceptions:
   yet this appears to work fine.
 - Order does not depend on greediness.
 - The regex is treated as fullmatch.
+
+
+The py2 branch
+==============
+
+The branch ``py2`` is meant to make ``sre-yield`` compatible again with Python2 to be
+used in some specific environments (e.g. JPython which only supports Python2).
+
+Integrate changes from the main branch into this one if necessary:
+
+.. code-block::
+
+   $ git checkout py2
+   $ git merge master
